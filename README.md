@@ -50,16 +50,16 @@ No need to modify any .env settings unless you have port conflicts. So, just cop
   npm run up -- -d
   ```
 
-3. **Generate App Key:**
-
-  ```sh
-  npm run key:generate
-  ```
-
-4. **Install dependencies:**
+3. **Install dependencies:**
 
   ```sh
   npm run composer:install
+  ```
+
+4. **Generate App Key:**
+
+  ```sh
+  npm run key:generate
   ```
 
 5. **Seed the Database:**
