@@ -52,8 +52,11 @@ sleep 5
 # Install composer dependencies
 npm run composer:install
 
+# Generate Laravel application key
+npm run key:generate
+
 # Seed the database
-npm run db:seed
+npm run db:reset
 
 # Restart the Docker environment
 npm run restart
