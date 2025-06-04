@@ -3,8 +3,15 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
-        "dev": "vite"
+        "init": "bash ./scripts/run-init.sh",
+        "up": "docker compose up",
+        "exec:laravel": "docker compose exec laravel.test",
+        "composer:install": "npm run exec:laravel composer install",
+        "db:seed": "npm run exec:laravel php artisan db:reset",
+        "worker:logs": "docker logs -f laravel-worker",
+        "shell:laravel": "npm run exec:laravel bash",
+        "db:reset": "npm run exec:laravel php artisan db:reset",
+        "queue:rerun": "npm run exec:laravel php artisan spell:residue-analyze"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",

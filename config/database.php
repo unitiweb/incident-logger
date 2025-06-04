@@ -62,6 +62,18 @@ return [
             ]) : [],
         ],
 
+        'mongodb' => [
+            'driver'   => 'mongodb',
+            'host'     => env('MONGO_DB_HOST', '127.0.0.1'),
+            'port'     => env('MONGO_DB_PORT', 27017),
+            'database' => env('MONGO_DB_DATABASE', 'incident_logger'),
+            'username' => env('MONGO_DB_USERNAME', 'root'),
+            'password' => env('MONGO_DB_PASSWORD', 'password'),
+            'options'  => [
+                'database' => env('MONGO_DB_AUTHENTICATION_DATABASE', 'admin'),
+            ],
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

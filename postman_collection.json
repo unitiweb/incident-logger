@@ -1,0 +1,243 @@
+{
+	"info": {
+		"_postman_id": "8f948d62-1b34-4ad8-ace2-4c843e26bf95",
+		"name": "Incident Logger API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5893040"
+	},
+	"item": [
+		{
+			"name": "Log Incident (combat-protocol)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-MAGIC-TOKEN",
+						"value": "auror-office-token-123",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"suspect_name\": \"Bellatrix Lestrange\",\n    \"crime_type\": \"Dark Magic\",\n    \"location\": \"Hogsmeade\",\n    \"auror_on_scene\": \"Kingsley Shacklebolt\",\n    \"witnesses\": [\"Minerva McGonagall\", \"Seamus Finnigan\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8040/api/incidents",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8040",
+					"path": [
+						"api",
+						"incidents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Log Incident (anomaly-routing)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-MAGIC-TOKEN",
+						"value": "department-of-mysteries-token-123",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"phenomenon\": \"Time Loop\",\n  \"witnesses\": [\"Luna Lovegood\"],\n  \"anomaly_level\": \"high\",\n  \"notes\": \"Temporal distortion detected in the Department of Mysteries.\"\n}\n"
+				},
+				"url": {
+					"raw": "http://localhost:8040/api/incidents",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8040",
+					"path": [
+						"api",
+						"incidents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Log Incident (compliance-check)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-MAGIC-TOKEN",
+						"value": "improper-use-of-magic-token-123",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"wizard_name\": \"Harry Potter\",\n  \"incident_type\": \"Underage Magic\",\n  \"location\": \"Privet Drive\",\n  \"reported_by\": \"Muggle\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8040/api/incidents",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8040",
+					"path": [
+						"api",
+						"incidents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Log Incident (rule-audit)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-MAGIC-TOKEN",
+						"value": "magical-law-enforcement-patrol-token-123",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"patrol_id\": \"MLEP-2025-001\",\n  \"officer\": \"Dawlish\",\n  \"rule_broken\": \"Statute of Secrecy\",\n  \"evidence\": [\"photograph\", \"wand trace\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8040/api/incidents",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8040",
+					"path": [
+						"api",
+						"incidents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Log Incident (muggle-wipe)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-MAGIC-TOKEN",
+						"value": "magical-accidents-and-catastrophes-token-123",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"event\": \"Memory Charm\",\n  \"affected_muggles\": 3,\n  \"location\": \"London Underground\",\n  \"lead_wizard\": \"Arthur Weasley\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8040/api/incidents",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8040",
+					"path": [
+						"api",
+						"incidents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Incident Reports",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-MAGIC-TOKEN",
+						"value": "{{magic_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8040/api/incidents/reports/683fa8049130afa456071e12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8040",
+					"path": [
+						"api",
+						"incidents",
+						"reports",
+						"683fa8049130afa456071e12"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "magic_token",
+			"value": "REPLACE_WITH_DEPARTMENT_TOKEN"
+		},
+		{
+			"key": "department_id",
+			"value": "REPLACE_WITH_DEPARTMENT_ID"
+		}
+	]
+}

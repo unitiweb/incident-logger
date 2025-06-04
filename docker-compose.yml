@@ -1,6 +1,6 @@
-version: '3'
 services:
     laravel.test:
+        container_name: il-api
         build:
             context: ./vendor/laravel/sail/runtimes/8.2
             dockerfile: Dockerfile
@@ -17,23 +17,29 @@ services:
         volumes:
             - '.:/var/www/html'
         depends_on:
-            - mysql
             - mongodb
-    mysql:
-        image: 'mysql:8.0'
-        ports:
-            - '3306:3306'
-        environment:
-            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-password}'
-            MYSQL_DATABASE: '${DB_DATABASE:-incident_logger}'
-            MYSQL_USER: '${DB_USERNAME:-sail}'
-            MYSQL_PASSWORD: '${DB_PASSWORD:-password}'
+
+    laravel-worker:
+        container_name: il-worker
+        build:
+            context: ./vendor/laravel/sail/runtimes/8.2
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: sail-8.2/app
+        depends_on:
+            - laravel.test
+            - mongodb
         volumes:
-            - 'sail-mysql:/var/lib/mysql'
+            - '.:/var/www/html'
+        entrypoint: ["php", "artisan", "queue:work", "--queue=high,medium,low"]
+        restart: unless-stopped
+
     mongodb:
+        container_name: il-db
         image: 'mongo:7'
         ports:
-            - '27017:27017'
+            - '${MONGO_PORT}:27017'
         environment:
             MONGO_INITDB_ROOT_USERNAME: '${MONGO_USERNAME:-root}'
             MONGO_INITDB_ROOT_PASSWORD: '${MONGO_PASSWORD:-password}'
