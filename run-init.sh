@@ -47,7 +47,7 @@ npm run up -- -d
 
 # Wait for the Docker containers to be ready
 echo "Waiting for Docker containers to be ready..."
-sleep 20
+sleep 10
 
 # Install composer dependencies
 npm run composer:install
