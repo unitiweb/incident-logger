@@ -7,13 +7,13 @@
         "up": "docker compose up",
         "down": "docker compose down",
         "restart": "npm run down && npm run up",
-        "exec:laravel": "docker compose exec laravel.test",
+        "key:generate": "npm run exec:laravel php artisan key:generate",
         "composer:install": "npm run exec:laravel composer install",
-        "db:seed": "npm run exec:laravel php artisan db:reset",
-        "worker:logs": "docker logs -f laravel-worker",
-        "shell:laravel": "npm run exec:laravel bash",
         "db:reset": "npm run exec:laravel php artisan db:reset",
-        "queue:rerun": "npm run exec:laravel php artisan spell:residue-analyze"
+        "worker:logs": "docker logs -f laravel-worker",
+        "queue:rerun": "npm run exec:laravel php artisan spell:residue-analyze",
+        "exec:laravel": "docker compose exec laravel.test",
+        "shell": "npm run exec:laravel bash"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",

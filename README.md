@@ -45,31 +45,34 @@ If the init script fails (_I haven't tested it on windows_) you can setup manual
 No need to modify any .env settings unless you have port conflicts. So, just copy example file.
 
 2. **Start the containers:**
-    ```sh
-    ./vendor/bin/sail up -d
-    ```
+
+  ```sh
+  npm run up -- -d
+  ```
 
 3. **Generate App Key:**
-    ```sh
-    ./vendor/bin/sail artisan generate:key
-    ```
+
+  ```sh
+  npm run key:generate
+  ```
 
 4. **Install dependencies:**
-    ```sh
-    ./vendor/bin/sail composer install
-    ```
+
+  ```sh
+  npm run composer:install
+  ```
 
 5. **Seed the Database:**
 
   ```
-  ./vendor/bin/sail artisan db:reset
+  npm run db:reset
   ```
 
 6. **Restart Docker Compose Containers:**
-    ```sh
-    ./vendor/bin/sail down
-    ./vendor/bin/sail up
-    ```
+
+  ```sh
+  npm run restart
+  ```
 
 ---
 
