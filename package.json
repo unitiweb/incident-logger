@@ -3,8 +3,10 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "init": "bash ./scripts/run-init.sh",
+        "init": "bash ./run-init.sh",
         "up": "docker compose up",
+        "down": "docker compose down",
+        "restart": "npm run down && npm run up",
         "exec:laravel": "docker compose exec laravel.test",
         "composer:install": "npm run exec:laravel composer install",
         "db:seed": "npm run exec:laravel php artisan db:reset",

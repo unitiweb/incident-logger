@@ -35,7 +35,7 @@ class ProcessIncidentJob implements ShouldQueue
         /**
          * Simulate a random failure for testing purposes.
          */
-        if (random_int(1, 3) === 1) {
+        if (random_int(1, 5) === 1) {
             logger()->warning('Simulated failure in ProcessIncidentJob for incident: ' . $this->incident->_id);
             throw new \Exception('Simulated random failure!');
         }
@@ -46,33 +46,26 @@ class ProcessIncidentJob implements ShouldQueue
         $cleaned = $gateway->cleanPayload($this->incident->raw_input_data);
         $withMetadata = $gateway->addMetadata($cleaned);
 
-        /**
-         * Maybe not necessary for a transaction here, but if we fail
-         * on the second db operation, we may not want to continue
-         * with the first operation having succeeded.
-         */
-        DB::transaction(function () use ($department, $withMetadata) {
-            $report = IncidentReport::create([
-                'incident_id' => $this->incident->_id,
-                'department_id' => $department->_id,
-                'data' => $withMetadata,
-                'status' => 'processed',
-                'processed_at' => now(),
-            ]);
+        $report = IncidentReport::create([
+            'incident_id' => $this->incident->_id,
+            'department_id' => $department->_id,
+            'data' => $withMetadata,
+            'status' => 'processed',
+            'processed_at' => now(),
+        ]);
 
-            IncidentLog::create([
-                'incident_id' => $this->incident->_id,
-                'action' => 'processed',
-                'details' => [
-                    'department' => $department->name,
-                    'report_id' => $report->_id,
-                ],
-                'timestamp' => now(),
-            ]);
+        IncidentLog::create([
+            'incident_id' => $this->incident->_id,
+            'action' => 'processed',
+            'details' => [
+                'department' => $department->name,
+                'report_id' => $report->_id,
+            ],
+            'timestamp' => now(),
+        ]);
 
-            $this->incident->status = 'processed';
-            $this->incident->save();
-        });
+        $this->incident->status = 'processed';
+        $this->incident->save();
     }
 
     /**
