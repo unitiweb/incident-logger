@@ -208,7 +208,7 @@
 				"header": [
 					{
 						"key": "X-MAGIC-TOKEN",
-						"value": "{{magic_token}}",
+						"value": "",
 						"type": "text"
 					}
 				],

@@ -2,74 +2,78 @@
 
 A Laravel + MongoDB API for magical incident reporting, featuring department-based authentication, queue-driven processing, and a gateway pattern for flexible incident handling.
 
----
-
-## Table of Contents
-
-- [Features](#features)
-- [Requirements](#requirements)
-- [Setup Instructions](#setup-instructions)
-- [Environment Variables](#environment-variables)
-- [Database Seeding](#database-seeding)
-- [Running the Application](#running-the-application)
-- [Queue Workers & Priorities](#queue-workers--priorities)
-- [Artisan Commands](#artisan-commands)
-- [API Authentication](#api-authentication)
-- [Testing with Postman](#testing-with-postman)
-- [Development Scripts](#development-scripts)
-- [Troubleshooting](#troubleshooting)
-
----
-
-## Features
-
-- **MongoDB** for all data storage (departments, incidents, reports, logs)
-- **Department-based authentication** using `magic_token`
-- **Queue-driven incident processing** with priority queues
-- **Gateway pattern** for department-specific incident handling
-- **Custom Artisan commands** for database reset and reprocessing failed incidents jobs
-- **Postman collection** for easy API testing
+>"I’m going to bed before either of you come up with another clever idea to get us killed — or worse, expelled."
+>– Philosopher’s Stone
 
 ---
 
 ## Requirements
 
+- npm (optional but needed to use init script)
 - Docker & Docker Compose
 
 ---
 
 ## Setup Instructions
 
-1. **Clone the repository:**
-    ```sh
-    git clone <repo-url>
-    cd incident-logger
-    ```
+**Clone the repository:**
+  ```sh
+  git clone git@github.com:unitiweb/incident-logger.git
+  cd incident-logger
+  ```
 
-2. **Copy and configure environment variables:**
-    ```sh
-    cp .env.example .env
-    ```
+#### Option #1 (preferred)
 
-3. **Start the containers:**
+I created an init script to handle all the setup details.
+
+1. **Run the Init Script:**
+
+  ```sh
+  npm run init
+  ```
+
+#### Option #2 (manual)
+
+If the init script fails (_I haven't tested it on windows_) you can setup manually.
+
+1. **Copy and configure environment variables:**
+
+  ```sh
+  cp .env.example .env
+  ```
+
+No need to modify any .env settings unless you have port conflicts. So, just copy example file.
+
+1. **Start the containers:**
     ```sh
     ./vendor/bin/sail up -d
     ```
 
-4. **Install dependencies:**
+2. **Generate App Key:**
+    ```sh
+    ./vendor/bin/sail artisan generate:key
+    ```
+
+3. **Install dependencies:**
     ```sh
     ./vendor/bin/sail composer install
     ```
 
-5. **Initialize the project (runs migrations, seeds, etc.):**
+4. **Seed the Database:**
+
+  ```
+  ./vendor/bin/sail artisan db:reset
+  ```
+
+5. **Restart Docker Compose Containers:**
     ```sh
-    npm run init
+    ./vendor/bin/sail down
+    ./vendor/bin/sail up
     ```
-    *(This runs `scripts/run-init.sh`)*
 
 ---
 
-## Database Seeding
+## Database Seeder
 
 - The seeder creates all departments with **hardcoded `magic_token` values** for easy testing.
 - You can find these tokens in `database/seeders/DepartmentSeeder.php`.
@@ -86,34 +90,20 @@ A Laravel + MongoDB API for magical incident reporting, featuring department-bas
 ## Queue Workers & Priorities
 
 - **Priority queues** are used to process Departments by priority_level as configured in the db.
-- The worker is configured in `docker-compose.yml`:
+- The worker is configured in `docker-compose.yml` and runs in it's own container:
     ```yaml
     entrypoint: ["php", "artisan", "queue:work", "--queue=high,medium,low"]
     ```
-- When dispatching jobs, the queue is set based on department or `priority_level`.
+- When dispatching jobs, the queue is set based on department `priority_level`.
 
 ---
 
-## Artisan Commands
+## API
 
-### **Reset & Seed Database**
-```sh
-./vendor/bin/sail artisan db:clear
-```
-- Drops all collections and reseeds departments.
-
-### **Reprocess Incomplete Incidents**
-```sh
-./vendor/bin/sail artisan spell:residue-analyze
-```
-- Finds all incidents with `status` of `pending` or `failed` and re-dispatches them for processing.
-
----
-
-## API Authentication
+### Authentication
 
 - **All endpoints require a department `magic_token` in the `X-MAGIC-TOKEN` header.**
-- Each department’s token is hardcoded in the seeder for easier testing.
+- Each department’s token is hardcoded in the seeder for easy testing.
 
 | Department                          | Magic Token                                   |
 |-------------------------------------|-----------------------------------------------|
@@ -122,6 +112,118 @@ A Laravel + MongoDB API for magical incident reporting, featuring department-bas
 | Improper Use of Magic Office        | improper-use-of-magic-token-123               |
 | Magical Law Enforcement Patrol      | magical-law-enforcement-patrol-token-123      |
 | Magical Accidents and Catastrophes  | magical--accidents-and-catastrophes-token-123 |
+
+---
+
+#### API Gateway Endpoints
+
+##### 1. Create Incident
+
+- **URL:** `POST /api/incidents`
+- **Headers:**
+  - `X-MAGIC-TOKEN: <department_magic_token>`
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+- **Sample Request Payload:**
+  ```json
+  {
+      "suspect_name": "Bellatrix Lestrange",
+      "crime_type": "Dark Magic",
+      "location": "Hogsmeade",
+      "auror_on_scene": "Kingsley Shacklebolt",
+      "witnesses": ["Minerva McGonagall", "Seamus Finnigan"]
+  }
+  ```
+
+##### 2. Anomaly Routing
+
+- **URL:** `POST /api/incidents`
+- **Headers:**
+  - `X-MAGIC-TOKEN: <department_magic_token>`
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+- **Sample Request Payload:**
+  ```json
+  {
+    "phenomenon": "Time Loop",
+    "witnesses": ["Luna Lovegood"],
+    "anomaly_level": "high",
+    "notes": "Temporal distortion detected in the Department of Mysteries."
+  }
+  ```
+
+##### 3. Compliance Check
+
+- **URL:** `POST /api/incidents`
+- **Headers:**
+  - `X-MAGIC-TOKEN: <department_magic_token>`
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+- **Sample Request Payload:**
+  ```json
+  {
+    "wizard_name": "Harry Potter",
+    "incident_type": "Underage Magic",
+    "location": "Privet Drive",
+    "reported_by": "Muggle"
+  }
+  ```
+
+##### 4. Rule Audit
+
+- **URL:** `POST /api/incidents`
+- **Headers:**
+  - `X-MAGIC-TOKEN: <department_magic_token>`
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+- **Sample Request Payload:**
+  ```json
+  {
+    "patrol_id": "MLEP-2025-001",
+    "officer": "Dawlish",
+    "rule_broken": "Statute of Secrecy",
+    "evidence": ["photograph", "wand trace"]
+  }
+  ```
+
+##### 5. Muggle Wipe
+
+- **URL:** `POST /api/incidents`
+- **Headers:**
+  - `X-MAGIC-TOKEN: <department_magic_token>`
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+- **Sample Request Payload:**
+  ```json
+  {
+    "event": "Memory Charm",
+    "affected_muggles": 3,
+    "location": "London Underground",
+    "lead_wizard": "Arthur Weasley"
+  }
+  ```
+
+#### API Reports Endpoint
+
+- **URL:** `GET /api/incidents/reports/{department_id}`
+- **Headers:**
+  - `X-MAGIC-TOKEN: <department_magic_token>`
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+
+## Artisan Commands
+
+### **Reset & Seed Database**
+```sh
+./vendor/bin/sail artisan db:reset
+```
+- Drops all collections and reseeds departments.
+
+### **Reprocess Incomplete Incidents**
+```sh
+./vendor/bin/sail artisan spell:residue-analyze
+```
+- Finds all incidents with `status` of `pending` or `failed` and re-dispatches them for processing.
 
 ---
 
@@ -157,4 +259,5 @@ A Laravel + MongoDB API for magical incident reporting, featuring department-bas
 
 ---
 
-**May The Force Be With You**
+>"Happiness can be found even in the darkest of times, if one only remembers to turn on the light."
+>– Prisoner of Azkaban
